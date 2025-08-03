@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¡Feliz Cumpleaños!</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #f38ad0, #ffffff);
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
+      height: 100%;
+      overflow: hidden; /* 🔧 Evita glitches horizontales y verticales */
+    }
+
+    /* 🏷️ Pantalla de inicio - Oculta inicialmente la carta */
+    .pantalla-inicio {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .pantalla-inicio button {
+      padding: 1.5rem 3rem;
+      font-size: 2rem;
+      background-color: #6246c5;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    /* 🏷️ Carta: oculta inicialmente */
+    h1, img {
+      display: none;
+      z-index: 10;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 4rem; /* 🏷️ Tamaño del texto de felicitación */
+      color: #ec0cb4;
+      text-align: center;
+      text-shadow: 2px 2px #0c0c0ce0;
+      margin-top: 150px;
+    }
+
+    img {
+      width: 300px;
+      display: block;
+      margin: 30px auto 0 auto;
+    }
+
+    .confeti {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      z-index: 5;
+      opacity: 0.9;
+    }
+
+    @keyframes caerIzquierda {
+      0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(100vw) translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes caerDerecha {
+      0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-100vw) translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .globo {
+      position: absolute;
+      width: 50px; /* 🏷️ Tamaño del globo (ancho) */
+      height: 70px; /* 🏷️ Tamaño del globo (alto) */
+      background-color: red;
+      border-radius: 50%;
+      bottom: -150px; /* 🔧 Inicia más abajo para evitar glitch */
+      animation: flotar 15s linear infinite; /* 🏷️ Velocidad de subida del globo */
+      z-index: 1;
+    }
+
+    .globo::after {
+      content: "";
+      position: absolute;
+      bottom: -40px; /* 🏷️ Longitud de la cuerda del globo */
+      left: 50%;
+      width: 2px; /* 🏷️ Grosor de la cuerda */
+      height: 40px; /* 🏷️ Tamaño visible de la cuerda */
+      background: black;
+      transform: translateX(-50%) rotate(10deg);
+      animation: moverCuerda 2s infinite ease-in-out;
+    }
+
+    @keyframes moverCuerda {
+      0%, 100% {
+        transform: translateX(-50%) rotate(5deg);
+      }
+      50% {
+        transform: translateX(-50%) rotate(-5deg);
+      }
+    }
+
+    @keyframes flotar {
+      0% {
+        bottom: -150px;
+        transform: translateX(0);
+      }
+      100% {
+        bottom: 110vh;
+        transform: translateX(30px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pantalla de inicio -->
+  <div class="pantalla-inicio" id="pantallaInicio">
+    <button onclick="iniciarCelebracion()">🎁 Presiona aquí</button>
+  </div>
+
+  <!-- Carta de cumpleaños -->
+  <h1 id="titulo">Feliz cumpleaños Yoselin 🎂</h1>
+  <img id="pastel" src="https://images.vexels.com/media/users/3/147031/isolated/preview/c3d3a5033c01fb866453840286932d53-bolo-de-chocolate-by-vexels.png" alt="Pastel de cumpleaños">
+
+  <!-- Audios -->
+  <audio id="confetiSound" src="./Iframe Confetti Party Popper _ Free Sound Effect [vxYVT7q5TCw].mp3" preload="auto"></audio>
+  <audio id="musicaFondo" src="./Iframe YouTube [5ar42kauTd8].mp3" preload="auto" loop></audio>
+
+  <script>
+    function crearGlobo() {
+      const colores = ["purple","lightpink","skyblue","lightpink"];
+      const globo = document.createElement("div");
+      globo.classList.add("globo");
+      globo.style.left = Math.random() * 100 + "vw";
+      globo.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+      globo.style.animationDuration = (50 + Math.random() * 30) + "s";
+      document.body.appendChild(globo);
+      setTimeout(() => globo.remove(), 180000);
+    }
+
+    function lanzarConfeti() {
+      const colores = ["#ff4081", "#ffd700", "#00bcd4", "#8bc34a", "#e91e63", "#ff5722"];
+      const sonido = document.getElementById("confetiSound");
+      sonido.play();
+
+      for (let i = 0; i < 250; i++) {
+        const confeti = document.createElement("div");
+        confeti.classList.add("confeti");
+        confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+        confeti.style.top = Math.random() * window.innerHeight * 0.5 + "px";
+        confeti.style.left = Math.random() * 100 + "vw";
+        confeti.style.animation = "caerIzquierda " + (2 + Math.random() * 1.5) + "s linear forwards";
+        document.body.appendChild(confeti);
+        setTimeout(() => confeti.remove(), 4000);
+      }
+
+      for (let i = 0; i < 250; i++) {
+        const confeti = document.createElement("div");
+        confeti.classList.add("confeti");
+        confeti.style.backgroundColor = colores[Math.floor(Math.random() * colores.length)];
+        confeti.style.top = Math.random() * window.innerHeight * 0.5 + "px";
+        confeti.style.left = Math.random() * 100 + "vw";
+        confeti.style.animation = "caerDerecha " + (2 + Math.random() * 1.5) + "s linear forwards";
+        document.body.appendChild(confeti);
+        setTimeout(() => confeti.remove(), 4000);
+      }
+    }
+
+    function iniciarCelebracion() {
+      // Oculta la pantalla de inicio
+      document.getElementById("pantallaInicio").style.display = "none";
+
+      // Muestra la carta
+      document.getElementById("titulo").style.display = "block";
+      document.getElementById("pastel").style.display = "block";
+
+      // Reproducir música y sonido
+      const musica = document.getElementById("musicaFondo");
+      const confetiSonido = document.getElementById("confetiSound");
+
+      musica.play();
+      confetiSonido.play();
+
+      // Lanza confeti y globos
+      lanzarConfeti();
+      for(let i = 0; i < 25; i++) {
+        setTimeout(crearGlobo, i * 600);
+      }
+    }
+  </script>
+</body>
+</html>
+
